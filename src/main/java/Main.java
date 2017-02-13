@@ -1,3 +1,5 @@
+import org.codehaus.jettison.json.JSONObject;
+import org.json.XML;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -23,6 +25,7 @@ public class Main extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -39,9 +42,13 @@ public class Main extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
+        String soapmessageString = "<xml>yourStringURLorFILE</xml>";
+        org.json.JSONObject soapDatainJsonObject = XML.toJSONObject(soapmessageString);
+
+
         if (message != null && message.hasText()) {
             switch (message.getText()) {
-                case "USD/RUB": sendMsg(message, "DOLLAR"); break;
+                case "USD/RUB": sendMsg(message, "DOLLAR"); System.out.println(soapDatainJsonObject); break;
                 case "EUR/RUB": sendMsg(message, "EURO"); break;
                 case "KZT/RUB": sendMsg(message, "TENGE"); break;
                 case "GBP/RUB": sendMsg(message, "POUND"); break;
