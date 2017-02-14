@@ -1,5 +1,3 @@
-import org.codehaus.jettison.json.JSONObject;
-import org.json.XML;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -10,6 +8,8 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import javax.ws.rs.GET;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +42,20 @@ public class Main extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
-        String soapmessageString = "<xml>yourStringURLorFILE</xml>";
-        org.json.JSONObject soapDatainJsonObject = XML.toJSONObject(soapmessageString);
-
-
         if (message != null && message.hasText()) {
             switch (message.getText()) {
-                case "USD/RUB": sendMsg(message, "DOLLAR"); System.out.println(soapDatainJsonObject); break;
-                case "EUR/RUB": sendMsg(message, "EURO"); break;
+                case "USD/RUB": sendMsg(message, "DOLLAR");
+                    //GetValute getValute = new GetValute();
+                    try {
+                        sendMsg(message, GetValute.getValute());
+                        GetValute.parserIntoMass();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "EUR/RUB": sendMsg(message, "EURO");
+                    break;
                 case "KZT/RUB": sendMsg(message, "TENGE"); break;
                 case "GBP/RUB": sendMsg(message, "POUND"); break;
                 default: sendMsg(message, "I don't know this command!"); break;
@@ -99,4 +105,6 @@ public class Main extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
+
 }
