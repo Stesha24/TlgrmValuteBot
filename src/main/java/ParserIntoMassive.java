@@ -53,27 +53,18 @@ public class ParserIntoMassive {
             System.out.println(valueMass[i]);
         }
 
-        //dateMass[0] = dateMass[0].replaceAll("Value = ", "");
-        //dateMass[0] = dateMass[0].replaceAll(",", ".");
         for (int i = 1; i < dateMass.length; i++) {
-            /*dateMass[i] = dateMass[i].replaceAll(" Value = ", "");
-            dateMass[i] = dateMass[i].replaceAll(",", ".");*/
+            dateMass[i] = dateMass[i].replaceAll(" Date = ", "");
             System.out.println(dateMass[i]);
         }
 
-        //valueMass[0] = valueMass[0].replaceAll("Value = ", "");
-        //valueMass[0] = valueMass[0].replaceAll(",", ".");
         for (int i = 1; i < nominalMass.length; i++) {
-            /*valueMass[i] = valueMass[i].replaceAll(" Value = ", "");
-            valueMass[i] = valueMass[i].replaceAll(",", ".");*/
+            nominalMass[i] = nominalMass[i].replaceAll(" Nominal = ", "");
             System.out.println(nominalMass[i]);
         }
 
-        //valueMass[0] = valueMass[0].replaceAll("Value = ", "");
-        //valueMass[0] = valueMass[0].replaceAll(",", ".");
         for (int i = 1; i < idMass.length; i++) {
-            /*valueMass[i] = valueMass[i].replaceAll(" Value = ", "");
-            valueMass[i] = valueMass[i].replaceAll(",", ".");*/
+            idMass[i] = idMass[i].replaceAll(" Id = ", "");
             System.out.println(idMass[i]);
         }
 
