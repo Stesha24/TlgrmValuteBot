@@ -19,10 +19,6 @@ public class Splitter {
 
         String[] splittingString = splittingStr.split("\n");
 
-        /*for (int i = 0; i < splittingString.length ; i++) {
-            System.out.println(splittingString[i]);
-        }*/
-
         return splittingString;
     }
 }

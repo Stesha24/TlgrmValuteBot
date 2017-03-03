@@ -1,3 +1,4 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -8,7 +9,6 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import javax.ws.rs.GET;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Body of Bot.
  */
-public class Main extends TelegramLongPollingBot {
+class Main extends TelegramLongPollingBot {
     public static void main(String[] args) {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
@@ -41,24 +41,58 @@ public class Main extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-
+        String id;
+        Date date = new Date();
+        ParserIntoMassive parserIntoMassive = new ParserIntoMassive();
+        String currValue;
         if (message != null && message.hasText()) {
             switch (message.getText()) {
-                case "USD/RUB": sendMsg(message, "DOLLAR");
-                    //GetValute getValute = new GetValute();
+                case "USD/RUB":
+                    id = "R01235";
                     try {
-                        sendMsg(message, GetValute.getValute());
-                        GetValute.parserIntoMass();
-
+                        parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
+                        currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        sendMsg(message, "Текущий курс доллара к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     break;
-                case "EUR/RUB": sendMsg(message, "EURO");
+                case "EUR/RUB":
+                    id = "R01239";
+                    try {
+                        parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
+                        currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        sendMsg(message, "Текущий курс евро к рублю: " + currValue);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
-                case "KZT/RUB": sendMsg(message, "TENGE"); break;
-                case "GBP/RUB": sendMsg(message, "POUND"); break;
-                default: sendMsg(message, "I don't know this command!"); break;
+                case "KZT/RUB":
+                    id = "R01335";
+                    try {
+                        parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
+                        currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        sendMsg(message, "Текущий курс 100 тенге к рублю: " + currValue);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //LineChartEx g = new LineChartEx();
+                    break;
+                case "GBP/RUB":
+                    id = "R01035";
+                    try {
+                        parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
+                        currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        sendMsg(message, "Текущий курс фунта к рублю: " + currValue);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+                default:
+                    sendMsg(message, "I don't know this command!");
+                    break;
             }
         }
     }
@@ -93,7 +127,6 @@ public class Main extends TelegramLongPollingBot {
         keyboard.add(keyboardSecondRow);
         // и устанваливаем этот список нашей клавиатуре
         replyKeyboardMarkup.setKeyboard(keyboard);
-
 
 
         sendMessage.setChatId(message.getChatId().toString());

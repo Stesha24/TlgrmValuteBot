@@ -13,6 +13,8 @@ import java.util.Arrays;
 public class GetValute {
 
     OkHttpClient client = new OkHttpClient();
+
+
     String getXML(String url) throws IOException {
 
         Request request = new Request.Builder()
@@ -23,53 +25,31 @@ public class GetValute {
         return response.body().string();
     }
 
-    static String getValute() throws IOException {
-
-        GetXML getXML = new GetXML();
+        static String getValute(String id, String date, String prevDate) throws IOException {
+        GetXML getXML = new GetXML(id, date, prevDate);
         Gson gson = new Gson();
         CbAPI cbAPI = gson.fromJson(getXML.gettingXML(), CbAPI.class);
 
         String[] strings = {
                 Arrays.toString(cbAPI.getValCurs().getRecord())
-                //cbAPI.getRecord().getValue()
+
         };
 
         return Arrays.toString(strings);
     }
 
+    //Get current value of valute.
+    static String currentValue(String[] valueMass) {
+        float currValue = Float.parseFloat(valueMass[valueMass.length-1]);
+        float prevValue = Float.parseFloat(valueMass[valueMass.length-2]);
 
-    static void parserIntoMass() throws IOException {
-
-        Splitter splitter = new Splitter();
-        String[] splitStr = splitter.split(GetValute.getValute());
-        int numberIndex = splitStr.length/4;
-
-        String[] valueMass = new String[numberIndex];
-        String[] dateMass = new String[numberIndex];
-        String[] nominalMass = new String[numberIndex];
-        String[] idMass = new String[numberIndex];
-
-        int counter = 0;
-        int index = 0;
-        for (int i = 0; i < splitStr.length; i++) {
-            switch (counter) {
-                case 0: valueMass[index] = splitStr[i]; break;
-                case 1: dateMass[index] = splitStr[i]; break;
-                case 2: nominalMass[index] = splitStr[i]; break;
-                case 3: idMass[index] = splitStr[i]; break;
-            }
-            if (counter == 3) {
-                counter = 0;
-                index++;
-            } else {
-                counter++;
-            }
+        String currentValue;
+        if (currValue>prevValue){
+            currentValue = currValue + "⬆";
+        } else {
+            currentValue = currValue + "⬇";
         }
-
-        for (int i = 0; i <valueMass.length ; i++) {
-            System.out.println(idMass[i]);
-        }
-
-
+        return currentValue;
     }
+
 }

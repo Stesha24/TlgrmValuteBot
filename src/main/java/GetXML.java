@@ -13,9 +13,20 @@ import java.io.IOException;
 public class GetXML {
 
 
+    private final String id;
+    private final String date;
+    private final String prevDate;
+
+    public GetXML(String id, String date, String prevDate) {
+        this.id = id;
+        this.date = date;
+        this.prevDate = prevDate;
+    }
+
     public String gettingXML() throws IOException {
+
         GetValute gv = new GetValute();
-        String xml = gv.getXML("http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=01/01/2017&date_req2=14/02/2017&VAL_NM_RQ=R01235");
+        String xml = gv.getXML("http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1="+prevDate+"&date_req2="+date+"&VAL_NM_RQ="+ id);
 
         org.json.JSONObject soapDatainJsonObject = XML.toJSONObject(xml);
         System.out.println(soapDatainJsonObject);
