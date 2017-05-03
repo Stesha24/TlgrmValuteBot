@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 /**
- * Created by 1 on 03.03.2017.
+ * Parsing JSON into arrays.
  */
 public class ParserIntoMassive {
 
@@ -53,17 +53,17 @@ public class ParserIntoMassive {
             System.out.println(valueMass[i]);
         }
 
-        for (int i = 1; i < dateMass.length; i++) {
+        for (int i = 0; i < dateMass.length; i++) {
             dateMass[i] = dateMass[i].replaceAll(" Date = ", "");
             System.out.println(dateMass[i]);
         }
 
-        for (int i = 1; i < nominalMass.length; i++) {
+        for (int i = 0; i < nominalMass.length; i++) {
             nominalMass[i] = nominalMass[i].replaceAll(" Nominal = ", "");
             System.out.println(nominalMass[i]);
         }
 
-        for (int i = 1; i < idMass.length; i++) {
+        for (int i = 0; i < idMass.length; i++) {
             idMass[i] = idMass[i].replaceAll(" Id = ", "");
             System.out.println(idMass[i]);
         }

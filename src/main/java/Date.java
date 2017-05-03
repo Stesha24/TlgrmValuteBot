@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * Created by 1 on 24.02.2017.
+ * Getting current date and previous date.
  */
 public class Date {
 

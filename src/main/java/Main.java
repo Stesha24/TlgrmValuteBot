@@ -2,6 +2,7 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -9,7 +10,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ class Main extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         String id;
+
         Date date = new Date();
         ParserIntoMassive parserIntoMassive = new ParserIntoMassive();
         String currValue;
@@ -52,6 +54,9 @@ class Main extends TelegramLongPollingBot {
                     try {
                         parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        System.out.println(parserIntoMassive.dateMass[0]);
+                        LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
+                        diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         sendMsg(message, "Текущий курс доллара к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -62,7 +67,9 @@ class Main extends TelegramLongPollingBot {
                     try {
                         parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
-                        sendMsg(message, "Текущий курс евро к рублю: " + currValue);
+                        LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
+                        diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
+                        sendMsg(message, "Текущий курс евро к рублю: "+currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -73,17 +80,21 @@ class Main extends TelegramLongPollingBot {
                     try {
                         parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
+                        diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         sendMsg(message, "Текущий курс 100 тенге к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //LineChartEx g = new LineChartEx();
+
                     break;
                 case "GBP/RUB":
                     id = "R01035";
                     try {
                         parserIntoMassive.parserIntoMass(id, date.date(), date.prevDate());
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
+                        LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
+                        diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         sendMsg(message, "Текущий курс фунта к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -91,15 +102,20 @@ class Main extends TelegramLongPollingBot {
 
                     break;
                 default:
-                    sendMsg(message, "I don't know this command!");
+                    try {
+                        sendMsg(message, "I don't know this command!");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
     }
 
-    private void sendMsg(Message message, String text) {
+    private void sendMsg(Message message, String text) throws FileNotFoundException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
+        SendPhoto sendPhoto = new SendPhoto();
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -129,11 +145,19 @@ class Main extends TelegramLongPollingBot {
         replyKeyboardMarkup.setKeyboard(keyboard);
 
 
-        sendMessage.setChatId(message.getChatId().toString());
+        /*sendMessage.setChatId(message.getChatId().toString());
         sendMessage.setReplyToMessageId(message.getMessageId());
-        sendMessage.setText(text);
+        sendMessage.setText(text);*/
+        InputStream imageFile = new FileInputStream("E:\\TlgrmValuteBot\\image\\LineChart.png");
+        sendPhoto.setNewPhoto("graphic",imageFile);
+        sendPhoto.setChatId(message.getChatId().toString());
+        sendPhoto.setReplyToMessageId(message.getMessageId());
+        sendPhoto.setCaption(text);
         try {
-            sendMessage(sendMessage);
+            //ПОФИКСИТЬ ВЫВОД ГРАФИКОВ
+            sendPhoto(sendPhoto);
+            //sendMessage(sendMessage);
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

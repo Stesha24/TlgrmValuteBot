@@ -1,5 +1,5 @@
 /**
- * Created by 1 on 14.02.2017.
+ * Splitting string into string without [] and with line breaks.
  */
 public class Splitter {
     public String[] split(String strForSplit) {
