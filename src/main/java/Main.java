@@ -5,7 +5,10 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -57,7 +60,7 @@ class Main extends TelegramLongPollingBot {
                         System.out.println(parserIntoMassive.dateMass[0]);
                         LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
-                        sendMsg(message, "Текущий курс доллара к рублю: " + currValue);
+                        sendPh(message, "Текущий курс доллара к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -69,7 +72,7 @@ class Main extends TelegramLongPollingBot {
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
                         LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
-                        sendMsg(message, "Текущий курс евро к рублю: "+currValue);
+                        sendPh(message, "Текущий курс евро к рублю: "+currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -82,7 +85,7 @@ class Main extends TelegramLongPollingBot {
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
                         LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
-                        sendMsg(message, "Текущий курс 100 тенге к рублю: " + currValue);
+                        sendPh(message, "Текущий курс 100 тенге к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -95,7 +98,7 @@ class Main extends TelegramLongPollingBot {
                         currValue = GetValute.currentValue(parserIntoMassive.valueMass);
                         LineChartEx diagramm = new LineChartEx(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
-                        sendMsg(message, "Текущий курс фунта к рублю: " + currValue);
+                        sendPh(message, "Текущий курс фунта к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -113,6 +116,50 @@ class Main extends TelegramLongPollingBot {
     }
 
     private void sendMsg(Message message, String text) throws FileNotFoundException {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboad(false);
+
+        // Создаем список строк клавиатуры
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        // Первая строчка клавиатуры
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        // Добавляем кнопки в первую строчку клавиатуры
+        keyboardFirstRow.add("USD/RUB");
+        keyboardFirstRow.add("EUR/RUB");
+
+        // Вторая строчка клавиатуры
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+        // Добавляем кнопки во вторую строчку клавиатуры
+        keyboardSecondRow.add("KZT/RUB");
+        keyboardSecondRow.add("GBP/RUB");
+
+        // Добавляем все строчки клавиатуры в список
+        keyboard.add(keyboardFirstRow);
+        keyboard.add(keyboardSecondRow);
+        // и устанваливаем этот список нашей клавиатуре
+        replyKeyboardMarkup.setKeyboard(keyboard);
+
+
+
+        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setReplyToMessageId(message.getMessageId());
+        sendMessage.setText(text);
+        try {
+            sendMessage(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void sendPh(Message message, String text) throws FileNotFoundException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         SendPhoto sendPhoto = new SendPhoto();
@@ -155,6 +202,11 @@ class Main extends TelegramLongPollingBot {
         sendPhoto.setCaption(text);
         try {
             //ПОФИКСИТЬ ВЫВОД ГРАФИКОВ
+            try {
+                Thread.sleep(1000); //Приостанавливает поток на 1 секунду
+            } catch (Exception e) {
+
+            }
             sendPhoto(sendPhoto);
             //sendMessage(sendMessage);
 
@@ -162,6 +214,5 @@ class Main extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
 
 }
