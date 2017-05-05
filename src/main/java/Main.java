@@ -160,55 +160,21 @@ class Main extends TelegramLongPollingBot {
 
 
     private void sendPh(Message message, String text) throws FileNotFoundException {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
         SendPhoto sendPhoto = new SendPhoto();
 
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboad(false);
-
-        // Создаем список строк клавиатуры
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        // Первая строчка клавиатуры
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        // Добавляем кнопки в первую строчку клавиатуры
-        keyboardFirstRow.add("USD/RUB");
-        keyboardFirstRow.add("EUR/RUB");
-
-        // Вторая строчка клавиатуры
-        KeyboardRow keyboardSecondRow = new KeyboardRow();
-        // Добавляем кнопки во вторую строчку клавиатуры
-        keyboardSecondRow.add("KZT/RUB");
-        keyboardSecondRow.add("GBP/RUB");
-
-        // Добавляем все строчки клавиатуры в список
-        keyboard.add(keyboardFirstRow);
-        keyboard.add(keyboardSecondRow);
-        // и устанваливаем этот список нашей клавиатуре
-        replyKeyboardMarkup.setKeyboard(keyboard);
-
-
-        /*sendMessage.setChatId(message.getChatId().toString());
-        sendMessage.setReplyToMessageId(message.getMessageId());
-        sendMessage.setText(text);*/
         InputStream imageFile = new FileInputStream("E:\\TlgrmValuteBot\\image\\LineChart.png");
         sendPhoto.setNewPhoto("graphic",imageFile);
         sendPhoto.setChatId(message.getChatId().toString());
         sendPhoto.setReplyToMessageId(message.getMessageId());
         sendPhoto.setCaption(text);
         try {
-            //ПОФИКСИТЬ ВЫВОД ГРАФИКОВ
+
             try {
-                Thread.sleep(1000); //Приостанавливает поток на 1 секунду
+                Thread.sleep(1000);
             } catch (Exception e) {
 
             }
             sendPhoto(sendPhoto);
-            //sendMessage(sendMessage);
 
         } catch (TelegramApiException e) {
             e.printStackTrace();

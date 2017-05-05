@@ -62,6 +62,7 @@ public class LineChartEx extends JFrame {
     XYDataset createDataset(String[] valueMass, String[] dateMass) {
         double a = 0;
         XYSeries series = new XYSeries("");
+
         for (int i = 0; i < dateMass.length; i++) {
             series.add(a, Double.parseDouble(valueMass[i]));
             a++;
@@ -98,7 +99,7 @@ public class LineChartEx extends JFrame {
         plot.setRangeGridlinesVisible(true);
         plot.setRangeGridlinePaint(Color.BLACK);
         NumberAxis axisR = (NumberAxis)plot.getRangeAxis();
-        axisR.setRange(Double.parseDouble(valueMass[0])-2, Double.parseDouble(valueMass[valueMass.length-1])+2);
+        axisR.setRange(Double.parseDouble(valueMass[0])-1, Double.parseDouble(valueMass[valueMass.length-1])+1);
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.BLACK);
 
