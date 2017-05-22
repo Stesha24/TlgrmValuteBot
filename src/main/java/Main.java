@@ -1,19 +1,16 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.io.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +60,8 @@ class Main extends TelegramLongPollingBot {
                         sendPh(message, "Текущий курс доллара к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                     break;
                 case "EUR/RUB":
@@ -74,6 +73,8 @@ class Main extends TelegramLongPollingBot {
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         sendPh(message, "Текущий курс евро к рублю: "+currValue);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
@@ -88,6 +89,8 @@ class Main extends TelegramLongPollingBot {
                         sendPh(message, "Текущий курс 100 тенге к рублю: " + currValue);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
 
                     break;
@@ -100,6 +103,8 @@ class Main extends TelegramLongPollingBot {
                         diagramm.Diagram(parserIntoMassive.valueMass, parserIntoMassive.dateMass);
                         sendPh(message, "Текущий курс фунта к рублю: " + currValue);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 

@@ -8,7 +8,7 @@ import org.json.XML;
 import java.io.IOException;
 
 /**
- * Created by 1 on 14.02.2017.
+ * Getting xml from cb.
  */
 public class GetXML {
 
